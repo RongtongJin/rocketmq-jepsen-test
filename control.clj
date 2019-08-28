@@ -27,5 +27,6 @@
                  (run "rm -rf rocketmq-jepsen/;mkdir rocketmq-jepsen")
                  (run "tar zxvf rocketmq-jepsen.tar.gz -C rocketmq-jepsen"))
              (cd "/root/rocketmq-jepsen"
-                 (run "tar zxvf rocketmq/distribution/target/rocketmq-4.5.2.tar.gz"))
+                 (run "tar zxvf rocketmq/distribution/target/rocketmq-4.5.2.tar.gz")
+                 (run "mv dledger-broker.conf rocketmq-4.5.2/conf/dledger-broker.conf"))
              )))
