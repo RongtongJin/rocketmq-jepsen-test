@@ -27,5 +27,5 @@
                  (run "rm -rf rocketmq-jepsen/;mkdir rocketmq-jepsen")
                  (run "tar zxvf rocketmq-jepsen.tar.gz -C rocketmq-jepsen"))
              (cd "/root/rocketmq-jepsen"
-                 (run "tar zxvf distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz"))
+                 (run "tar zxvf distribution/target/rocketmq-4.5.2.tar.gz"))
              )))
