@@ -1,0 +1,37 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Leiningen template
+*.jar
+*.class
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+.nrepl-port
+.cpcache/
+
+### Clojure template
+*.jar
+*.class
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+.nrepl-port
+.cpcache/
+
+.gitignore
+.idea/
+rocketmq-jespen-test.iml
+rocketmq-client.iml
+target/
+
+
+*.tar.gz
