@@ -30,7 +30,7 @@
 .gitignore
 .idea/
 rocketmq-jespen-test.iml
-rocketmq-client.iml
+rocketmqclient.iml
 target/
 
 
