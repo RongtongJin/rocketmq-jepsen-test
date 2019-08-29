@@ -13,12 +13,61 @@
             [jepsen.control.util :as cu]
             [jepsen.os :as os]))
 
+(defonce rocketmq-path "/root/rocketmq-jepsen/rocketmq-4.5.2")
+(defonce rocketmq-conf-path "/root/rocketmq-jepsen/rocketmq-4.5.2/conf")
+(defonce rocketmq-dledger-port 40911)
+(defonce rocketmq-start "bin/mqbroker")
+(defonce rocketmq-stop "bin/mqshutdown")
+(defonce rocketmq-store-path "/tmp/rmqstore")
+(defonce rocketmq-log-path "/root/logs/rocketmqlogs")
+
+(defn peer-id [node]
+  (str node))
+
+(defn peer-str [node]
+  (str (peer-id node) "-" node ":" rocketmq-dledger-port))
+
+(defn peers
+  "Constructs an initial cluster string for a test, like
+  \"n0-host1:20911;n1-host2:20911,...\""
+  [test]
+  (->> (:nodes test)
+       (map (fn [node]
+              (peer-str node)))
+       (cstr/join ";")))
+
+(defn start! [test node]
+  (info "Start rocketmq broker" node)
+  (c/cd rocketmq-path
+        (c/exec :sh
+                rocketmq-start
+                "-c"
+                "conf/jepsen-test-broker.conf")))
+
+(defn stop! [node]
+  (info "Stop rocketmq broker" node)
+  (c/cd rocketmq-path
+        (c/exec :sh
+                rocketmq-stop
+                "broker")))
 
 (defn db
   "RocketMQ db."
   []
   (reify db/DB
     (setup! [_ test node]
+      (c/exec :rm
+              :-rf
+              dledger-log-path)
+      (c/cd rocketmq-conf-path
+            (c/exec* "cp dledger-broker.conf jepsen-test-broker.conf"))
+      (c/cd rocketmq-conf-path
+            (info (c/exec*
+                    (format "echo %s >> jepsen-test-broker.conf"
+                            (str "dLegerPeers=" (peers test)))))
+            (info (c/exec*
+                    (format "echo %s >> jepsen-test-broker.conf"
+                            (str "dLegerSelfId=" (peer-id node)))))
       (start! test node)
       (Thread/sleep 20000)
       )
@@ -28,7 +77,7 @@
       (Thread/sleep 20000)
       (c/exec :rm
               :-rf
-              dledger-data-path))))
+              dledger-store-path)))))
 
 (defn rocketmq-jepsen-test
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
