@@ -58,7 +58,7 @@
     (setup! [_ test node]
       (c/exec :rm
               :-rf
-              dledger-log-path)
+              rocketmq-log-path)
       (c/cd rocketmq-conf-path
             (c/exec* "cp dledger-broker.conf jepsen-test-broker.conf"))
       (c/cd rocketmq-conf-path
