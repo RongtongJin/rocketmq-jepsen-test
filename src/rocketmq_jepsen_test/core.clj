@@ -70,14 +70,14 @@
                             (str "dLegerSelfId=" (peer-id node)))))
       (start! test node)
       (Thread/sleep 20000)
-      )
+      ))
 
     (teardown! [_ test node]
       (stop! node)
       (Thread/sleep 20000)
       (c/exec :rm
               :-rf
-              dledger-store-path)))))
+              dledger-store-path))))
 
 (defn rocketmq-jepsen-test
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
