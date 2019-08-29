@@ -16,7 +16,7 @@
 (defonce rocketmq-path "/root/rocketmq-jepsen/rocketmq-4.5.2")
 (defonce rocketmq-conf-path "/root/rocketmq-jepsen/rocketmq-4.5.2/conf")
 (defonce rocketmq-dledger-port 40911)
-(defonce rocketmq-start "bin/mqbroker")
+(defonce rocketmq-start "bin/brokerstartup.sh")
 (defonce rocketmq-stop "bin/brokershutdown.sh")
 (defonce rocketmq-store-path "/tmp/rmqstore")
 (defonce rocketmq-log-path "/root/logs/rocketmqlogs")
