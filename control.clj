@@ -5,7 +5,7 @@
                       {:host "172.16.2.124" :user "root"}
                       {:host "172.16.2.127" :user "root"}])
 
-(deftask :date "echo date on cluster"  []
+(deftask :date "echo date on cluster" []
          (ssh "date"))
 
 (deftask :build []
@@ -16,7 +16,7 @@
                  (run "mvn -Prelease-all -DskipTests clean install -U")
                  )))
 
-         (local (run "rm rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.5.2.tar.gz dledger-broker.conf")))
+         (local (run "rm rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.5.2.tar.gz dledger-broker.conf brokershutdown.sh")))
 
 
 (deftask :deploy []
@@ -28,5 +28,6 @@
                  (run "tar zxvf rocketmq-jepsen.tar.gz -C rocketmq-jepsen"))
              (cd "/root/rocketmq-jepsen"
                  (run "tar zxvf rocketmq/distribution/target/rocketmq-4.5.2.tar.gz")
-                 (run "mv dledger-broker.conf rocketmq-4.5.2/conf/dledger-broker.conf"))
+                 (run "mv dledger-broker.conf rocketmq-4.5.2/conf/dledger-broker.conf")
+                 (run "chmod a+x brokershutdown.sh;mv brokershutdown.sh rocketmq-4.5.2/bin/brokershutdown.sh"))
              )))
