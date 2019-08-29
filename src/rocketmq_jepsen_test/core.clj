@@ -79,6 +79,20 @@
               :-rf
               rocketmq-store-path))))
 
+(defrecord Client [conn]
+  client/Client
+  (open! [this test node])
+
+  (setup! [this test])
+
+  (invoke! [_ test op])
+
+  (teardown! [this test])
+
+  (close! [_ test]
+
+    ))
+
 (defn rocketmq-jepsen-test
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
   :concurrency, ...), constructs a test map."
@@ -87,7 +101,8 @@
          opts
          {:name "rocketmq-jepsen-test"
           :os   os/noop
-          :db   (db)}))
+          :db   (db)
+          :client (Client. nil)}))
 
 (defn -main
   "Handles command line arguments. Can either run a test, or a web server for
