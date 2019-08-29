@@ -76,7 +76,7 @@
       (Thread/sleep 20000)
       (c/exec :rm
               :-rf
-              dledger-store-path))))
+              rocketmq-store-path))))
 
 (defn rocketmq-jepsen-test
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
