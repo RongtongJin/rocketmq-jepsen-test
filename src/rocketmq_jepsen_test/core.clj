@@ -47,7 +47,7 @@
 (defn stop! [node]
   (info "Stop rocketmq broker" node)
   (c/cd rocketmq-path
-        (c/exec :sh
+        (c/exec* :sh
                 rocketmq-stop
                 "broker")))
 
