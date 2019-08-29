@@ -67,10 +67,9 @@
                             (str "dLegerPeers=" (peers test)))))
             (info (c/exec*
                     (format "echo %s >> jepsen-test-broker.conf"
-                            (str "dLegerSelfId=" (peer-id node)))))
+                            (str "dLegerSelfId=" (peer-id node))))))
       (start! test node)
-      (Thread/sleep 20000)
-      ))
+      (Thread/sleep 20000))
 
     (teardown! [_ test node]
       (stop! node)
@@ -85,9 +84,9 @@
   [opts]
   (merge tests/noop-test
          opts
-         {:name          "rocketmq-jepsen-test"
-          :os            os/noop
-          :db            (db)}))
+         {:name "rocketmq-jepsen-test"
+          :os   os/noop
+          :db   (db)}))
 
 (defn -main
   "Handles command line arguments. Can either run a test, or a web server for
