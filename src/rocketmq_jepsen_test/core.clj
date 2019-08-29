@@ -21,8 +21,10 @@
 (defonce rocketmq-store-path "/tmp/rmqstore")
 (defonce rocketmq-log-path "/root/logs/rocketmqlogs")
 
+(def dledger-self-id (hash-map "172.16.2.121" "n0" "172.16.2.122" "n1" "172.16.2.123" "n2" "172.16.2.124" "n3" "172.16.2.127" "n4"))
+
 (defn peer-id [node]
-  (str node))
+  (get dledger-self-id (str node)))
 
 (defn peer-str [node]
   (str (peer-id node) "-" node ":" rocketmq-dledger-port))
