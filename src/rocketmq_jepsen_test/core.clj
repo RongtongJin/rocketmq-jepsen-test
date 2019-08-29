@@ -62,10 +62,10 @@
             (c/exec* "cp dledger-broker.conf jepsen-test-broker.conf"))
       (c/cd rocketmq-conf-path
             (info (c/exec*
-                    (format "echo %s >> jepsen-test-broker.conf"
+                    (format "echo \"%s\" >> jepsen-test-broker.conf"
                             (str "dLegerPeers=" (peers test)))))
             (info (c/exec*
-                    (format "echo %s >> jepsen-test-broker.conf"
+                    (format "echo \"%s\" >> jepsen-test-broker.conf"
                             (str "dLegerSelfId=" (peer-id node))))))
       (start! test node)
       (Thread/sleep 20000))
