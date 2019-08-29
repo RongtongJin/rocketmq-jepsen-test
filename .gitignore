@@ -27,10 +27,10 @@
 .nrepl-port
 .cpcache/
 
-.gitignore
 .idea/
 rocketmq-jespen-test.iml
 rocketmqclient.iml
+rocketmqclient/.idea/
 target/
 
 
