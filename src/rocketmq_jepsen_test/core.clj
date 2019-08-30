@@ -11,7 +11,9 @@
              [nemesis :as nemesis]]
             [jepsen.checker.timeline :as timeline]
             [jepsen.control.util :as cu]
-            [jepsen.os :as os]))
+            [jepsen.os :as os])
+  (:import [com.jinrongtong5.rocketmqclient JepsenClient]))
+
 
 (defonce rocketmq-path "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT")
 (defonce rocketmq-conf-path "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT/conf")
@@ -79,18 +81,59 @@
               :-rf
               rocketmq-store-path))))
 
+(defn- create-client [test]
+  (doto (JepsenClient.) (.startup)))
+
+(defn- shutdown-client [client]
+  (-> client
+      :conn
+      (.shutdown)))
+
+(defn- enqueue
+  "enqueue element to rocketmq"
+  [client value]
+  (-> client
+      :conn
+      (.enqueue (pr-str value))))
+
+(defn- dequeue
+  "dequeue element from rocketmq"
+  [client]
+  (-> client
+      :conn
+      (.dequeue)))
+
 (defrecord Client [conn]
   client/Client
-  (open! [this test node])
+  (open! [this test node]
+    (-> this
+        (assoc :node node)
+        (assoc :conn (create-client test))))
 
   (setup! [this test])
 
-  (invoke! [_ test op])
+  (invoke! [this test op]
+    (try
+      (case (:f op)
+        :enqueue (let [code, (enqueue this (:value op))]
+                   (cond
+                     (= code -1) (assoc op :type :fail)
+                     (= code 0) (assoc op :type :ok)
+                     (= code 1) (assoc op :type :info)
+                     :else (assoc op :type :fail :error (str "error code: " res))))
+
+        :dequeue (let [res, (dequeue this)]
+                   if (nil? res)
+                   (assoc op :type :fail :error :empty)
+                   (assoc op :type :ok :value res)))
+
+      (catch Exception e
+        (assoc op :type :info :error e))))
 
   (teardown! [this test])
 
   (close! [_ test]
-
+    (shutdown-client this)
     ))
 
 (defn rocketmq-jepsen-test
@@ -99,9 +142,9 @@
   [opts]
   (merge tests/noop-test
          opts
-         {:name "rocketmq-jepsen-test"
-          :os   os/noop
-          :db   (db)
+         {:name   "rocketmq-jepsen-test"
+          :os     os/noop
+          :db     (db)
           :client (Client. nil)}))
 
 (defn -main
