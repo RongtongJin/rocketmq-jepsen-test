@@ -7,15 +7,12 @@ public class ClientTest {
 
         jepsenClient.startup();
 
-        //send
-        for (int i = 0; i < 50; i++) {
-            int sendCode = jepsenClient.enqueue(Integer.toString(i));
-            System.out.println("enqueue : "+ i + ": sendCode = " + sendCode);
-        }
-
-        //receive
+        //send and receive
         for (int i = 0; i < 50; i++) {
             System.out.println("dequeue : "+i+": content = " + jepsenClient.dequeue());
+            int sendCode = jepsenClient.enqueue(Integer.toString(i));
+            System.out.println("enqueue : "+ i + ": sendCode = " + sendCode);
+
         }
 
         System.out.println("drain start. ");

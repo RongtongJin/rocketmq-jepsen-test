@@ -12,7 +12,7 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.remoting.exception.RemotingSendRequestException;
 
 public class JepsenClient {
-    private static final String topic = "jepsen_test";
+    private static final String topic = "jepsen_test3";
     private static final String producerGroupName = "consumer_group";
     private static final String consumerGroupName = "producer_group";
     private static final int FAIL_CODE = -1;
@@ -26,6 +26,7 @@ public class JepsenClient {
         consumer.setNamesrvAddr("localhost:9876");
 //        producer.setNamesrvAddr("172.16.2.120:9876");
 //        consumer.setNamesrvAddr("172.16.2.120:9876");
+        consumer.setAutoCommit(false);
         consumer.setPullBatchSize(1);
         consumer.subscribe(topic, "*");
     }
@@ -78,7 +79,8 @@ public class JepsenClient {
     public String dequeue() {
         List<MessageExt> messages = consumer.poll();
         if (!messages.isEmpty()) {
-            return messages.get(0).getBody().toString();
+            consumer.commitSync();
+            return new String(messages.get(0).getBody());
         } else {
             return null;
         }
