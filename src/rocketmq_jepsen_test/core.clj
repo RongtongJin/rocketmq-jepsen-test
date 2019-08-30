@@ -13,8 +13,8 @@
             [jepsen.control.util :as cu]
             [jepsen.os :as os]))
 
-(defonce rocketmq-path "/root/rocketmq-jepsen/rocketmq-4.5.2")
-(defonce rocketmq-conf-path "/root/rocketmq-jepsen/rocketmq-4.5.2/conf")
+(defonce rocketmq-path "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT")
+(defonce rocketmq-conf-path "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT/conf")
 (defonce rocketmq-dledger-port 40911)
 (defonce rocketmq-start "bin/brokerstartup.sh")
 (defonce rocketmq-stop "bin/brokershutdown.sh")

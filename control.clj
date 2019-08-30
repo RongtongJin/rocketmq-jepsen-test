@@ -13,10 +13,18 @@
          (local
            (run
              (cd "rocketmq"
+                 (run "git chekout -b jepsen_test origin/jepsen_test")
                  (run "mvn -Prelease-all -DskipTests clean install -U")
                  )))
 
-         (local (run "rm rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.5.2.tar.gz dledger-broker.conf brokershutdown.sh brokerstartup.sh")))
+         (local
+           (run
+             (cd "rocketmqclient"
+                 (run "mvn clean install -DskipTests")
+                 )))
+
+
+         (local (run "rm rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz dledger-broker.conf brokershutdown.sh brokerstartup.sh")))
 
 
 (deftask :deploy []
@@ -27,8 +35,8 @@
                  (run "rm -rf rocketmq-jepsen/;mkdir rocketmq-jepsen")
                  (run "tar zxvf rocketmq-jepsen.tar.gz -C rocketmq-jepsen"))
              (cd "/root/rocketmq-jepsen"
-                 (run "tar zxvf rocketmq/distribution/target/rocketmq-4.5.2.tar.gz")
-                 (run "mv dledger-broker.conf rocketmq-4.5.2/conf/dledger-broker.conf")
-                 (run "chmod a+x brokershutdown.sh;mv brokershutdown.sh rocketmq-4.5.2/bin/brokershutdown.sh")
-                 (run "chmod a+x brokerstartup.sh;mv brokerstartup.sh rocketmq-4.5.2/bin/brokerstartup.sh"))
+                 (run "tar zxvf rocketmq/distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz")
+                 (run "mv dledger-broker.conf rocketmq-4.6.0-SNAPSHOT/conf/dledger-broker.conf")
+                 (run "chmod a+x brokershutdown.sh;mv brokershutdown.sh rocketmq-4.6.0-SNAPSHOT/bin/brokershutdown.sh")
+                 (run "chmod a+x brokerstartup.sh;mv brokerstartup.sh rocketmq-4.6.0-SNAPSHOT/bin/brokerstartup.sh"))
              )))
