@@ -132,7 +132,7 @@
 
   (teardown! [this test])
 
-  (close! [_ test]
+  (close! [this test]
     (shutdown-client this)
     ))
 
