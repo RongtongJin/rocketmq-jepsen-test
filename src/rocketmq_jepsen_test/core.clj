@@ -9,6 +9,9 @@
              [client :as client]
              [generator :as gen]
              [nemesis :as nemesis]]
+            [knossos.core          :as knossos]
+            [knossos.op            :as op]
+            [knossos.model    :as model]
             [jepsen.checker.timeline :as timeline]
             [jepsen.control.util :as cu]
             [jepsen.os :as os])
@@ -148,8 +151,10 @@
           :client (Client. nil)
           :model      (model/unordered-queue)
           :checker    (checker/compose
-                       {:queue       (checker/queue)
-                        :total-queue (checker/total-queue)})
+                       { :timeline (timeline/html)
+                         :perf (checker/perf)
+                         :queue       (checker/queue)
+                         :total-queue (checker/total-queue)})
           :generator  (gen/phases
                        (->> (gen/queue)
                             (gen/delay 1)
