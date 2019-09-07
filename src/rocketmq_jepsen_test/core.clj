@@ -145,7 +145,21 @@
          {:name   "rocketmq-jepsen-test"
           :os     os/noop
           :db     (db)
-          :client (Client. nil)}))
+          :client (Client. nil)
+          :model      (model/unordered-queue)
+          :checker    (checker/compose
+                       {:queue       (checker/queue)
+                        :total-queue (checker/total-queue)})
+          :generator  (gen/phases
+                       (->> (gen/queue)
+                            (gen/delay 1)
+                            (gen/nemesis nil)
+                            (gen/time-limit 30))
+                       (gen/sleep 30)
+                       (gen/clients
+                        (gen/each
+                         (gen/once {:type :invoke, :f :drain}))))
+                            }))
 
 (defn -main
   "Handles command line arguments. Can either run a test, or a web server for
