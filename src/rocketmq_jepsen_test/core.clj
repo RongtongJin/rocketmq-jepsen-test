@@ -120,7 +120,7 @@
                      (= code -1) (assoc op :type :fail)
                      (= code 0) (assoc op :type :ok)
                      (= code 1) (assoc op :type :info)
-                     :else (assoc op :type :fail :error (str "error code: " res))))
+                     :else (assoc op :type :fail :error (str "error code: " code))))
 
         :dequeue (let [res, (dequeue this)]
                    if (nil? res)
