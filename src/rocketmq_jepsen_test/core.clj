@@ -151,10 +151,10 @@
           :client (Client. nil)
           :model      (model/unordered-queue)
           :checker    (checker/compose
-                       { :timeline (timeline/html)
-                         :perf (checker/perf)
-                         :queue       (checker/queue)
-                         :total-queue (checker/total-queue)})
+                       { :queue       (checker/queue)
+                         :total-queue (checker/total-queue)
+                         :timeline (timeline/html)
+                         :perf (checker/perf)})
           :generator  (gen/phases
                        (->> (gen/queue)
                             (gen/delay 1)
