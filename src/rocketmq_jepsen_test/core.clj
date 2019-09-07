@@ -123,9 +123,9 @@
                      :else (assoc op :type :fail :error (str "error code: " code))))
 
         :dequeue (let [res, (dequeue this)]
-                   if (nil? res)
-                   (assoc op :type :fail :error :empty)
-                   (assoc op :type :ok :value res)))
+                   (if (nil? res)
+                     (assoc op :type :fail :error :empty)
+                     (assoc op :type :ok :value res))))
 
       (catch Exception e
         (assoc op :type :info :error e))))
