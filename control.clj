@@ -13,7 +13,7 @@
          (local
            (run
              (cd "rocketmq"
-                 (run "git chekout -b jepsen_test origin/jepsen_test")
+                 (run "git checkout -b jepsen_test origin/jepsen_test")
                  (run "mvn -Prelease-all -DskipTests clean install -U")
                  )))
 
