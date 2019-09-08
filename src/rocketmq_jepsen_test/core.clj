@@ -143,7 +143,7 @@
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
   :concurrency, ...), constructs a test map."
   [opts]
-  (assoc tests/noop-test
+  (merge tests/noop-test
          opts
          {:name   "rocketmq-jepsen-test"
           :os     os/noop
