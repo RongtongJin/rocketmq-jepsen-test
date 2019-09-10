@@ -134,7 +134,7 @@
         :drain (loop [values []]
                  (let [res (dequeue this op)]
                    (if (= (:type res) :ok)
-                     (recur (conj values values (:value res)))
+                     (recur (conj values (:value res)))
                      (assoc op :type :ok, :value values)))))
 
       (catch Exception e
