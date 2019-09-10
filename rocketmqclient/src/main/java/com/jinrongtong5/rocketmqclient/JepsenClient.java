@@ -1,6 +1,7 @@
 package com.jinrongtong5.rocketmqclient;
 
 import java.util.List;
+import java.util.UUID;
 import org.apache.rocketmq.client.consumer.DefaultLitePullConsumer;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -13,8 +14,8 @@ import org.apache.rocketmq.remoting.exception.RemotingSendRequestException;
 
 public class JepsenClient {
     private static final String topic = "jepsen_test";
-    private static final String producerGroupName = "consumer_group";
-    private static final String consumerGroupName = "producer_group";
+    private static final String producerGroupName = "producer_group";
+    private static final String consumerGroupName = "consumer_group";
     private static final int FAIL_CODE = -1;
     private static final int OK_CODE = 0;
     private static final int INFO_CODE = 1;
@@ -24,6 +25,9 @@ public class JepsenClient {
     public void init() throws Exception {
 //        producer.setNamesrvAddr("localhost:9876");
 //        consumer.setNamesrvAddr("localhost:9876");
+        String instanceName  = UUID.randomUUID().toString().substring(24);
+        producer.setInstanceName(instanceName);
+        consumer.setInstanceName(instanceName);
         producer.setNamesrvAddr("172.16.2.120:9876");
         consumer.setNamesrvAddr("172.16.2.120:9876");
         consumer.setAutoCommit(false);
