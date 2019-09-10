@@ -104,7 +104,7 @@
 
 (defn- dequeue
   "dequeue element from rocketmq"
-  [client]
+  [client op]
   (let [res, (-> client :conn (.dequeue))]
     (if (nil? res)
       (assoc op :type :fail :error :empty)
@@ -129,10 +129,10 @@
                      (= code 1) (assoc op :type :info)
                      :else (assoc op :type :fail :error (str "error code: " code))))
 
-        :dequeue (dequeue this)
+        :dequeue (dequeue this op)
 
         :drain (loop [values []]
-                 (let [res (dequeue this)]
+                 (let [res (dequeue this op)]
                    (if (= (:type res) :ok)
                      (recur (conj values values (:value v)))
                      (assoc op :type :ok, :value values)))))
