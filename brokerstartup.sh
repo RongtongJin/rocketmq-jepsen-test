@@ -30,4 +30,4 @@ fi
 
 export ROCKETMQ_HOME
 
-sh ${ROCKETMQ_HOME}/bin/runbroker.sh org.apache.rocketmq.broker.BrokerStartup $@
+nohup sh ${ROCKETMQ_HOME}/bin/runbroker.sh org.apache.rocketmq.broker.BrokerStartup $@ >> rocketmq-jepsen.log 2>&1 &
