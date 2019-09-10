@@ -65,6 +65,9 @@
       (c/exec :rm
               :-rf
               rocketmq-log-path)
+      (c/exec :rm
+              :-rf
+              rocketmq-store-path)
       (c/cd rocketmq-conf-path
             (c/exec* "cp dledger-broker.conf jepsen-test-broker.conf"))
       (c/cd rocketmq-conf-path
@@ -128,7 +131,13 @@
         :dequeue (let [res, (dequeue this)]
                    (if (nil? res)
                      (assoc op :type :fail :error :empty)
-                     (assoc op :type :ok :value res))))
+                     (assoc op :type :ok :value (read-string res))))
+
+        :drain (loop [values []]
+                 (let [res (dequeue this)]
+                   (if (nil? res)
+                     (assoc op :type :ok, :value values)
+                     (recur (conj values (:value (read-string res))))))))
 
       (catch Exception e
         (assoc op :type :info :error e))))
