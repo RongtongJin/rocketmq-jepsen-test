@@ -156,10 +156,10 @@
           :os     os/noop
           :db     (db)
           :client (Client. nil)
-          :model      (model/unordered-queue)
+         ; :model      (model/unordered-queue)
           :checker    (checker/compose
                        {
-                         :queue       (checker/queue)
+                         :queue   (checker/queue model/unordered-queue)
                          ;:total-queue (checker/total-queue)
                          })
           :generator  (gen/phases
