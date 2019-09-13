@@ -165,10 +165,10 @@
                             (gen/delay 1)
                             (gen/nemesis nil)
                             (gen/time-limit 60))
-                       (gen/sleep 15)
-                       (gen/clients
-                        (gen/each
-                         (gen/once {:type :invoke, :f :drain}))))
+                       (gen/sleep 15))
+                       ;(gen/clients
+                        ;(gen/each
+                        ; (gen/once {:type :invoke, :f :drain}))))
                             }))
 
 (defn -main
