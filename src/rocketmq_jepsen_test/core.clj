@@ -158,8 +158,8 @@
           :client (Client. nil)
           :model      (model/unordered-queue)
           :checker    (checker/compose
-                       { 
-                         :total-queue (checker/total-queue)})
+                       { :queue       (checker/queue)
+                         })
           :generator  (gen/phases
                        (->> (gen/queue)
                             (gen/delay 1)
