@@ -159,7 +159,7 @@
           :model      (model/unordered-queue)
           :checker    (checker/compose
                        {
-                         :queue   (checker/queue :model)
+                         :queue   (checker/queue)
                          ;:total-queue (checker/total-queue)
                          })
           :generator  (gen/phases
