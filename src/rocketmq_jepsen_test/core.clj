@@ -160,7 +160,7 @@
           :checker    (checker/compose
                        {
                          :queue   (checker/queue)
-                         :total-queue (checker/total-queue)
+                         ;:total-queue (checker/total-queue)
                          })
           :generator  (gen/phases
                        (->> (gen/queue)
