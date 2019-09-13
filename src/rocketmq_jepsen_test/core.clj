@@ -156,7 +156,7 @@
           :os     os/noop
           :db     (db)
           :client (Client. nil)
-          :model      (model/unordered-queue)
+          ;:model      (model/unordered-queue)
           :checker    (checker/compose
                        {
                          :total-queue (checker/total-queue)})
