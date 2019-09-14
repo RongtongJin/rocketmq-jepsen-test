@@ -152,10 +152,11 @@
   [opts]
   (merge tests/noop-test
          opts
-         {:name   "rocketmq-jepsen-test"
-          :os     os/noop
-          :db     (db)
-          :client (Client. nil)
+         {:name       "rocketmq-jepsen-test"
+          :os         os/noop
+          :db         (db)
+          :client     (Client. nil)
+          :nemesis    (nemesis/partition-random-halves)
           :model      (model/unordered-queue)
           :checker    (checker/compose
                        {
@@ -180,6 +181,6 @@
   browsing results."
   [& args]
   (cli/run! (merge (cli/single-test-cmd {:test-fn rocketmq-jepsen-test
-                                         :opt-spec cli-opts})
+                                         })
                    (cli/serve-cmd))
             args))
