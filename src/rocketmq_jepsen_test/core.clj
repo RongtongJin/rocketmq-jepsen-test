@@ -189,7 +189,10 @@
                                              (gen/sleep (:interval opts))
                                              {:type :info, :f :stop}])))
                             (gen/time-limit (:time-limit opts)))
-                       (gen/sleep 10)
+                       (gen/log "Healing cluster")
+                       (gen/nemesis (gen/once {:type :info, :f :stop}))
+                       (gen/log "Waiting for recovery")
+                       (gen/sleep 40)
                        (gen/clients
                         (gen/each
                          (gen/once {:type :invoke, :f :drain}))))
