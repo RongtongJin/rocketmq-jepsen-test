@@ -159,6 +159,8 @@
           :model      (model/unordered-queue)
           :checker    (checker/compose
                        {
+                         :timeline (timeline/html)
+                         :perf (checker/perf)
                          :queue   (checker/queue)
                          :total-queue (checker/total-queue)
                          })
