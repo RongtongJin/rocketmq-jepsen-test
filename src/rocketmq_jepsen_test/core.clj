@@ -183,11 +183,12 @@
           :generator  (gen/phases
                        (->> (gen/queue)
                             (gen/delay (/ (:rate opts)))
-                            (gen/nemesis
-                             (gen/seq(cycle [(gen/sleep (:interval opts))
-                                             {:type :info, :f :start}
-                                             (gen/sleep (:interval opts))
-                                             {:type :info, :f :stop}])))
+;                            (gen/nemesis
+;                             (gen/seq(cycle [(gen/sleep (:interval opts))
+;                                             {:type :info, :f :start}
+;                                             (gen/sleep (:interval opts))
+;                                             {:type :info, :f :stop}])))
+                            (gen/nemesis nil)
                             (gen/time-limit (:time-limit opts)))
                        (gen/log "Healing cluster")
                        (gen/nemesis (gen/once {:type :info, :f :stop}))
