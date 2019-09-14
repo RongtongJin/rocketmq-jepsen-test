@@ -159,7 +159,7 @@
           :model      (model/unordered-queue)
           :checker    (checker/compose
                        {
-                         ;:queue   (checker/queue)
+                        ; :queue   (checker/queue)
                          :total-queue (checker/total-queue)
                          })
           :generator  (gen/phases
@@ -167,10 +167,10 @@
                             (gen/delay 1)
                             (gen/nemesis nil)
                             (gen/time-limit 60))
-                       (gen/sleep 15)
-                       (gen/clients
-                        (gen/each
-                         (gen/once {:type :invoke, :f :drain}))))
+                       (gen/sleep 15))
+                       ;(gen/clients
+                        ;(gen/each
+                        ; (gen/once {:type :invoke, :f :drain}))))
                             }))
 
 (defn -main
