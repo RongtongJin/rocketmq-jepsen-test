@@ -166,10 +166,10 @@
                          })
           :generator  (gen/phases
                        (->> (gen/queue)
-                            (gen/delay 1)
+                            (gen/delay 1/10)
                             (gen/nemesis nil)
-                            (gen/time-limit 60))
-                       (gen/sleep 15)
+                            (gen/time-limit 120))
+                       (gen/sleep 10)
                        (gen/clients
                         (gen/each
                          (gen/once {:type :invoke, :f :drain}))))
@@ -179,6 +179,7 @@
   "Handles command line arguments. Can either run a test, or a web server for
   browsing results."
   [& args]
-  (cli/run! (merge (cli/single-test-cmd {:test-fn rocketmq-jepsen-test})
+  (cli/run! (merge (cli/single-test-cmd {:test-fn rocketmq-jepsen-test
+                                         :opt-spec cli-opts})
                    (cli/serve-cmd))
             args))

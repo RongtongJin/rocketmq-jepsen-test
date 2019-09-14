@@ -30,7 +30,7 @@ public class JepsenClient {
         consumer.setInstanceName(instanceName);
         producer.setNamesrvAddr("172.16.2.120:9876");
         consumer.setNamesrvAddr("172.16.2.120:9876");
-        consumer.setPollTimeoutMillis(1000);
+        consumer.setPollTimeoutMillis(500);
         consumer.setAutoCommit(false);
         consumer.setPullBatchSize(1);
         consumer.subscribe(topic, "*");
