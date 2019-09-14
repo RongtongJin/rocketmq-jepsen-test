@@ -146,11 +146,8 @@
     (shutdown-client this)
     ))
 
-(def nemesis-map
-  "A map of nemesis names to functions that construct nemesis, given opts."
-  {"partition-random-halves"           (nemesis/partition-random-halves)
-   "partition-random-node"             (nemesis/partition-random-node)
-   })
+(defn- parse-int [s]
+  (Integer/parseInt s))
 
 (def cli-opts
   "Additional command line options."
