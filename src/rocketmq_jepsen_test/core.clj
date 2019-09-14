@@ -146,6 +146,24 @@
     (shutdown-client this)
     ))
 
+(def nemesis-map
+  "A map of nemesis names to functions that construct nemesis, given opts."
+  {"partition-random-halves"           (nemesis/partition-random-halves)
+   "partition-random-node"             (nemesis/partition-random-node)
+   })
+
+(def cli-opts
+  "Additional command line options."
+  [["-r" "--rate HZ" "Approximate number of requests per second, per thread."
+    :default  10
+    :parse-fn read-string
+    :validate [#(and (number? %) (pos? %)) "Must be a positive number"]]
+   ["-i" "--interval TIME" "How long is the nemesis interval?"
+    :default  60
+    :parse-fn parse-int
+    :validate [#(and (number? %) (pos? %)) "Must be a positive number"]]]
+  )
+
 (defn rocketmq-jepsen-test
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
   :concurrency, ...), constructs a test map."
@@ -167,9 +185,13 @@
                          })
           :generator  (gen/phases
                        (->> (gen/queue)
-                            (gen/delay 1/10)
-                            (gen/nemesis nil)
-                            (gen/time-limit 120))
+                            (gen/delay (/ (:rate opts)))
+                            (gen/nemesis
+                             (gen/seq(cycle [(gen/sleep (:interval opts))
+                                             {:type :info, :f :start}
+                                             (gen/sleep (:interval opts))
+                                             {:type :info, :f :stop}])))
+                            (gen/time-limit (:time-limit opts)))
                        (gen/sleep 10)
                        (gen/clients
                         (gen/each
@@ -181,6 +203,6 @@
   browsing results."
   [& args]
   (cli/run! (merge (cli/single-test-cmd {:test-fn rocketmq-jepsen-test
-                                         })
+                                         :opt-spec cli-opts})
                    (cli/serve-cmd))
             args))
