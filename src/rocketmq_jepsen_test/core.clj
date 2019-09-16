@@ -185,12 +185,12 @@
             :db         (db)
             :client     (Client. nil)
             :nemesis    nemesis
-            :model      (model/unordered-queue)
+            ;:model      (model/unordered-queue)
             :checker    (checker/compose
                          {
                            :timeline (timeline/html)
                            :perf (checker/perf)
-                           :queue   (checker/queue)
+                          ;:queue   (checker/queue)
                            :total-queue (checker/total-queue)
                            })
             :generator  (gen/phases
