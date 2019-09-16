@@ -83,10 +83,7 @@
 
     (teardown! [_ test node]
       (stop! node)
-      (Thread/sleep 20000)
-      (c/exec :rm
-              :-rf
-              rocketmq-store-path))))
+      (Thread/sleep 20000))))
 
 (defn- create-client [test]
   (doto (JepsenClient.) (.startup)))

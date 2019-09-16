@@ -2,6 +2,8 @@ package com.jinrongtong5.rocketmqclient;
 
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.rocketmq.client.consumer.DefaultLitePullConsumer;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -14,6 +16,7 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.remoting.exception.RemotingSendRequestException;
 
 public class JepsenClient {
+    private static Logger log = LoggerFactory.getLogger(JepsenClient.class);
     private static final String topic = "jepsen_test";
     private static final String producerGroupName = "producer_group";
     private static final String consumerGroupName = "consumer_group";
@@ -26,7 +29,7 @@ public class JepsenClient {
     public void init() throws Exception {
 //        producer.setNamesrvAddr("localhost:9876");
 //        consumer.setNamesrvAddr("localhost:9876");
-        String instanceName  = UUID.randomUUID().toString().substring(24);
+        String instanceName = UUID.randomUUID().toString().substring(24);
         producer.setInstanceName(instanceName);
         consumer.setInstanceName(instanceName);
         producer.setNamesrvAddr("172.16.2.120:9876");
@@ -58,36 +61,30 @@ public class JepsenClient {
         try {
             sendResult = producer.send(message);
         } catch (RemotingException e) {
-            e.printStackTrace();
             if (e instanceof RemotingConnectException || e instanceof RemotingSendRequestException) {
-                System.out.println("RemotingException error");
+                log.warn("RemotingException error", e);
                 return FAIL_CODE;
             } else {
-                System.out.println("RemotingException info");
+                log.warn("RemotingException info", e);
                 return INFO_CODE;
             }
         } catch (IllegalStateException e) {
-            System.out.println("IllegalStateException error");
-            e.printStackTrace();
+            log.warn("IllegalStateException error", e);
             return FAIL_CODE;
         } catch (MQClientException e) {
-            System.out.println("MQClientException error");
-            e.printStackTrace();
+            log.warn("MQClientException error", e);
             return FAIL_CODE;
         } catch (InterruptedException e) {
-            System.out.println("InterruptedException error");
-            e.printStackTrace();
+            log.warn("InterruptedException error", e);
             return FAIL_CODE;
         } catch (MQBrokerException e) {
-            System.out.println("MQBrokerException error");
-            e.printStackTrace();
+            log.warn("MQBrokerException error", e);
             return FAIL_CODE;
         } catch (Exception e) {
-            System.out.println("Exception info");
-            e.printStackTrace();
+            log.warn("Exception info", e);
             return INFO_CODE;
         }
-        System.out.println(value+" = "+sendResult.getMsgId());
+        log.info("value {} = msgId:{}, messageQueue:{}, queueOffset:{}, offsetMsgId:{}.", value, sendResult.getMsgId(), sendResult.getMessageQueue(), sendResult.getQueueOffset(), sendResult.getOffsetMsgId());
         return OK_CODE;
     }
 

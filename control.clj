@@ -41,3 +41,15 @@
                  (run "chmod a+x brokershutdown.sh;mv brokershutdown.sh rocketmq-4.6.0-SNAPSHOT/bin/brokershutdown.sh")
                  (run "chmod a+x brokerstartup.sh;mv brokerstartup.sh rocketmq-4.6.0-SNAPSHOT/bin/brokerstartup.sh"))
              )))
+
+(deftask :start []
+         (ssh
+           (run
+             (cd "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT"
+                 (run "sh bin/brokerstartup.sh -c conf/jepsen-test-broker.conf")))))
+
+(deftask :stop []
+         (ssh
+           (run
+             (cd "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT"
+                 (run "sh bin/brokershutdown.sh")))))
