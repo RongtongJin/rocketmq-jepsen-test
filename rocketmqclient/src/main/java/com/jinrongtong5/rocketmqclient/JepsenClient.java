@@ -6,6 +6,7 @@ import org.apache.rocketmq.client.consumer.DefaultLitePullConsumer;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.exception.RemotingConnectException;
@@ -53,8 +54,9 @@ public class JepsenClient {
 
     public int enqueue(String value) {
         Message message = new Message(topic, value.getBytes());
+        SendResult sendResult;
         try {
-            producer.send(message);
+            sendResult = producer.send(message);
         } catch (RemotingException e) {
             e.printStackTrace();
             if (e instanceof RemotingConnectException || e instanceof RemotingSendRequestException) {
@@ -85,6 +87,7 @@ public class JepsenClient {
             e.printStackTrace();
             return INFO_CODE;
         }
+        System.out.println(value+" = "+sendResult.getMsgId());
         return OK_CODE;
     }
 
