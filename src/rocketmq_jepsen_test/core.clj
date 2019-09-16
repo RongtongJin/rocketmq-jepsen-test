@@ -24,6 +24,7 @@
 (defonce rocketmq-start "bin/brokerstartup.sh")
 (defonce rocketmq-stop "bin/brokershutdown.sh")
 (defonce rocketmq-store-path "/tmp/rmqstore")
+(defonce rocketmq-bin "java")
 (defonce rocketmq-log-path "/root/logs/rocketmqlogs")
 
 (def dledger-self-id (hash-map "172.16.2.121" "n0" "172.16.2.122" "n1" "172.16.2.123" "n2" "172.16.2.124" "n3" "172.16.2.127" "n4"))
@@ -146,6 +147,14 @@
     (shutdown-client this)
     ))
 
+(def nemesis-map
+  "A map of nemesis names to functions that construct nemesis, given opts."
+  {"partition-random-halves"           (nemesis/partition-random-halves)
+   "partition-random-node"             (nemesis/partition-random-node)
+   "hammer-time"                       (nemesis/hammer-time rocketmq-bin)
+   "bridge"                            (nemesis/partitioner (comp nemesis/bridge shuffle))
+   "partition-majorities-ring"         (nemesis/partition-majorities-ring)})
+
 (defn- parse-int [s]
   (Integer/parseInt s))
 
@@ -155,6 +164,9 @@
     :default  10
     :parse-fn read-string
     :validate [#(and (number? %) (pos? %)) "Must be a positive number"]]
+   [nil "--nemesis NAME" "What nemesis should we run?"
+    :default  "partition-random-node"
+    :validate [nemesis-map (cli/one-of nemesis-map)]]
    ["-i" "--interval TIME" "How long is the nemesis interval?"
     :default  60
     :parse-fn parse-int
@@ -165,39 +177,40 @@
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
   :concurrency, ...), constructs a test map."
   [opts]
-  (merge tests/noop-test
-         opts
-         {:name       "rocketmq-jepsen-test"
-          :os         os/noop
-          :db         (db)
-          :client     (Client. nil)
-          :nemesis    (nemesis/partition-random-node)
-          :model      (model/unordered-queue)
-          :checker    (checker/compose
-                       {
-                         :timeline (timeline/html)
-                         :perf (checker/perf)
-                         :queue   (checker/queue)
-                         :total-queue (checker/total-queue)
-                         })
-          :generator  (gen/phases
-                       (->> (gen/queue)
-                            (gen/delay (/ (:rate opts)))
-                            (gen/nemesis
-                             (gen/seq(cycle [(gen/sleep (:interval opts))
-                                             {:type :info, :f :start}
-                                             (gen/sleep (:interval opts))
-                                             {:type :info, :f :stop}])))
-                            ;                            (gen/nemesis nil)
-                            (gen/time-limit (:time-limit opts)))
-                       (gen/log "Healing cluster")
-                       (gen/nemesis (gen/once {:type :info, :f :stop}))
-                       (gen/log "Waiting for recovery")
-                       (gen/sleep 40)
-                       (gen/clients
-                        (gen/each
-                         (gen/once {:type :invoke, :f :drain}))))
-                            }))
+  (let [nemesis (get nemesis-map (:nemesis opts))]
+    (merge tests/noop-test
+           opts
+           {:name       "rocketmq-jepsen-test"
+            :os         os/noop
+            :db         (db)
+            :client     (Client. nil)
+            :nemesis    nemesis
+            :model      (model/unordered-queue)
+            :checker    (checker/compose
+                         {
+                           :timeline (timeline/html)
+                           :perf (checker/perf)
+                           :queue   (checker/queue)
+                           :total-queue (checker/total-queue)
+                           })
+            :generator  (gen/phases
+                         (->> (gen/queue)
+                              (gen/delay (/ (:rate opts)))
+                              (gen/nemesis
+                               (gen/seq(cycle [(gen/sleep (:interval opts))
+                                               {:type :info, :f :start}
+                                               (gen/sleep (:interval opts))
+                                               {:type :info, :f :stop}])))
+                              ;                            (gen/nemesis nil)
+                              (gen/time-limit (:time-limit opts)))
+                         (gen/log "Healing cluster")
+                         (gen/nemesis (gen/once {:type :info, :f :stop}))
+                         (gen/log "Waiting for recovery")
+                         (gen/sleep 40)
+                         (gen/clients
+                          (gen/each
+                           (gen/once {:type :invoke, :f :drain}))))
+                              })))
 
 (defn -main
   "Handles command line arguments. Can either run a test, or a web server for
