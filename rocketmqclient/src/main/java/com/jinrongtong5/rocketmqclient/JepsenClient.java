@@ -58,23 +58,30 @@ public class JepsenClient {
         } catch (RemotingException e) {
             e.printStackTrace();
             if (e instanceof RemotingConnectException || e instanceof RemotingSendRequestException) {
+                System.out.println("RemotingException error");
                 return FAIL_CODE;
             } else {
+                System.out.println("RemotingException info");
                 return INFO_CODE;
             }
         } catch (IllegalStateException e) {
+            System.out.println("IllegalStateException error");
             e.printStackTrace();
             return FAIL_CODE;
         } catch (MQClientException e) {
+            System.out.println("MQClientException error");
             e.printStackTrace();
             return FAIL_CODE;
         } catch (InterruptedException e) {
+            System.out.println("InterruptedException error");
             e.printStackTrace();
             return FAIL_CODE;
         } catch (MQBrokerException e) {
+            System.out.println("MQBrokerException error");
             e.printStackTrace();
             return FAIL_CODE;
         } catch (Exception e) {
+            System.out.println("Exception info");
             e.printStackTrace();
             return INFO_CODE;
         }
