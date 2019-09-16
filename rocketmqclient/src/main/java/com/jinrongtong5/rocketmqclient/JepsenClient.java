@@ -42,6 +42,7 @@ public class JepsenClient {
 
     public void startup() {
         try {
+            log.info("Client startup.");
             init();
             producer.start();
             consumer.start();
@@ -51,6 +52,7 @@ public class JepsenClient {
     }
 
     public void shutdown() {
+        log.info("Client shutdown.");
         producer.shutdown();
         consumer.shutdown();
     }
