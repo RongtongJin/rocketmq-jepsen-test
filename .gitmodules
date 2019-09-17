@@ -1,3 +1,6 @@
 [submodule "rocketmq"]
 	path = rocketmq
 	url = git@github.com:RongtongJin/rocketmq.git
+[submodule "openmessaging-storage-dledger"]
+	path = openmessaging-storage-dledger
+	url = git@github.com:RongtongJin/openmessaging-storage-dledger.git
