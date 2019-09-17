@@ -32,7 +32,7 @@
                  )))
 
 
-         (local (run "rm rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz dledger-broker.conf brokershutdown.sh brokerstartup.sh")))
+         (local (run "rm rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz dledger-broker.conf brokershutdown.sh brokerstartup.sh stop_dropcaches.sh")))
 
 
 (deftask :deploy []
@@ -46,7 +46,8 @@
                  (run "tar zxvf rocketmq/distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz")
                  (run "mv dledger-broker.conf rocketmq-4.6.0-SNAPSHOT/conf/dledger-broker.conf")
                  (run "chmod a+x brokershutdown.sh;mv brokershutdown.sh rocketmq-4.6.0-SNAPSHOT/bin/brokershutdown.sh")
-                 (run "chmod a+x brokerstartup.sh;mv brokerstartup.sh rocketmq-4.6.0-SNAPSHOT/bin/brokerstartup.sh"))
+                 (run "chmod a+x brokerstartup.sh;mv brokerstartup.sh rocketmq-4.6.0-SNAPSHOT/bin/brokerstartup.sh")
+                 (run "chmod a+x stop_dropcaches.sh;mv stop_dropcaches.sh rocketmq-4.6.0-SNAPSHOT/bin/stop_dropcaches.sh"))
              )))
 
 (deftask :start []

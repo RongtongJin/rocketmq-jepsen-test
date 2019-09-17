@@ -23,6 +23,7 @@
 (defonce rocketmq-dledger-port 40911)
 (defonce rocketmq-start "bin/brokerstartup.sh")
 (defonce rocketmq-stop "bin/brokershutdown.sh")
+(defonce rocketmq-stop-dropcaches "bin/stop_dropcaches.sh")
 (defonce rocketmq-store-path "/tmp/rmqstore")
 (defonce rocketmq-bin "java")
 (defonce rocketmq-log-path "/root/logs/rocketmqlogs")
@@ -57,6 +58,12 @@
   (c/cd rocketmq-path
         (c/exec :sh
                 rocketmq-stop)))
+
+(defn stop_dropcaches! [node]
+  (info "Stop rocketmq broker" node)
+  (c/cd rocketmq-path
+        (c/exec :sh
+                rocketmq-stop-dropcaches)))
 
 (defn db
   "RocketMQ db."
@@ -165,6 +172,19 @@
       long
       (take (shuffle xs))))
 
+(def crash-random-nodes
+  "A nemesis that crashes a random subset of nodes."
+  (nemesis/node-start-stopper
+    mostly-small-nonempty-subset
+    (fn start [test node]
+      (info "Crash start" node)
+      (stop_dropcaches! node)
+      [:killed node])
+    (fn stop [test node]
+      (info "Crash stop" node)
+      (start! test node)
+      [:restarted node])))
+
 (def kill-random-processes
   "A nemesis that kills a random subset of processes."
   (nemesis/node-start-stopper
@@ -183,6 +203,7 @@
   {"partition-random-halves"           (nemesis/partition-random-halves)
    "partition-random-node"             (nemesis/partition-random-node)
    "kill-random-processes"             kill-random-processes
+   "crash-random-nodes"                crash-random-nodes
    "hammer-time"                       (nemesis/hammer-time rocketmq-bin)
    "bridge"                            (nemesis/partitioner (comp nemesis/bridge shuffle))
    "partition-majorities-ring"         (nemesis/partition-majorities-ring)})
