@@ -144,10 +144,45 @@
     (shutdown-client this)
     ))
 
+(defn mostly-small-nonempty-subset
+  "Returns a subset of the given collection, with a logarithmically decreasing
+  probability of selecting more elements. Always selects at least one element.
+
+      (->> #(mostly-small-nonempty-subset [1 2 3 4 5])
+           repeatedly
+           (map count)
+           (take 10000)
+           frequencies
+           sort)
+      ; => ([1 3824] [2 2340] [3 1595] [4 1266] [5 975])"
+  [xs]
+  (-> xs
+      count
+      inc
+      Math/log
+      rand
+      Math/exp
+      long
+      (take (shuffle xs))))
+
+(def kill-random-processes
+  "A nemesis that kills a random subset of processes."
+  (nemesis/node-start-stopper
+    mostly-small-nonempty-subset
+    (fn start [test node]
+      (info "Kill start" node)
+      (stop! node)
+      [:killed node])
+    (fn stop [test node]
+      (info "Kill stop" node)
+      (start! test node)
+      [:restarted node])))
+
 (def nemesis-map
   "A map of nemesis names to functions that construct nemesis, given opts."
   {"partition-random-halves"           (nemesis/partition-random-halves)
    "partition-random-node"             (nemesis/partition-random-node)
+   "kill-random-processes"             kill-random-processes
    "hammer-time"                       (nemesis/hammer-time rocketmq-bin)
    "bridge"                            (nemesis/partitioner (comp nemesis/bridge shuffle))
    "partition-majorities-ring"         (nemesis/partition-majorities-ring)})
