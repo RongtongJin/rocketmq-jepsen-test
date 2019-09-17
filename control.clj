@@ -12,6 +12,13 @@
          (local (run "git submodule init;git submodule update"))
          (local
            (run
+             (cd "openmessaging-storage-dledger"
+                 (run "git checkout -b rocketmq_jepsen_test origin/rocketmq_jepsen_test")
+                 (run "git checkout rocketmq_jepsen_test")
+                 (run "mvn clean install -DskipTests")
+                 )))
+         (local
+           (run
              (cd "rocketmq"
                  (run "git checkout -b jepsen_test origin/jepsen_test")
                  (run "git checkout jepsen_test")
