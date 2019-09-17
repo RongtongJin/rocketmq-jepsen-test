@@ -115,7 +115,10 @@
         (assoc :node node)
         (assoc :conn (create-client test))))
 
-  (setup! [this test])
+  (setup! [this test]
+    (c/exec :rm
+            :-rf
+            rocketmq-log-path))
 
   (invoke! [this test op]
     (try
