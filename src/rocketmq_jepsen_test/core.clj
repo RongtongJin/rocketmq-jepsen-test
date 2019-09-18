@@ -172,10 +172,15 @@
       long
       (take (shuffle xs))))
 
+(defn random-two-nodes-subset
+  "Returns a subset of the given collection, which contains two nodes randomly."
+  [xs]
+  (take 2 (shuffle xs)))
+
 (def crash-random-nodes
   "A nemesis that crashes a random subset of nodes."
   (nemesis/node-start-stopper
-    mostly-small-nonempty-subset
+    random-two-nodes-subset
     (fn start [test node]
       (info "Crash start" node)
       (stop_dropcaches! node)
@@ -188,7 +193,7 @@
 (def kill-random-processes
   "A nemesis that kills a random subset of processes."
   (nemesis/node-start-stopper
-    mostly-small-nonempty-subset
+    random-two-nodes-subset
     (fn start [test node]
       (info "Kill start" node)
       (stop! node)
