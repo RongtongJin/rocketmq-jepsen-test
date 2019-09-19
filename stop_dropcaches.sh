@@ -8,7 +8,7 @@ fi
 
 echo "The mqbroker(${pid}) is running..."
 
-kill ${pid}
+kill -9 ${pid}
 
 echo "Send shutdown request to mqbroker(${pid}) OK"
 
