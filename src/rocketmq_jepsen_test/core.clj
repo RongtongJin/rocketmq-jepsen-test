@@ -177,10 +177,15 @@
   [xs]
   (take 2 (shuffle xs)))
 
+(defn get-first-node-subset
+  [xs]
+  (take 1 xs))
+
+
 (def crash-random-nodes
   "A nemesis that crashes a random subset of nodes."
   (nemesis/node-start-stopper
-    random-two-nodes-subset
+    get-first-node-subset
     (fn start [test node]
       (info "Crash start" node)
       (stop_dropcaches! node)
@@ -193,7 +198,7 @@
 (def kill-random-processes
   "A nemesis that kills a random subset of processes."
   (nemesis/node-start-stopper
-    random-two-nodes-subset
+    get-first-node-subset
     (fn start [test node]
       (info "Kill start" node)
       (stop! node)
