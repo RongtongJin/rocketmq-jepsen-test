@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# To free pagecache, dentries and inodes
+echo 3 >/proc/sys/vm/drop_caches
+
 pid=`ps ax | grep -i 'org.apache.rocketmq.broker.BrokerStartup' |grep java | grep -v grep | awk '{print $1}'`
 if [ -z "$pid" ] ; then
         echo "No mqbroker running."
