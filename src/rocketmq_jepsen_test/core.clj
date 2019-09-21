@@ -178,6 +178,7 @@
   (take 2 (shuffle xs)))
 
 (defn get-first-node-subset
+  "Returns a subset of the given collection, which contains first node."
   [xs]
   (take 1 xs))
 
