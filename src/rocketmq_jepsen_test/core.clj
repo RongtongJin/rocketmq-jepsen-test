@@ -186,7 +186,7 @@
 (def crash-random-nodes
   "A nemesis that crashes a random subset of nodes."
   (nemesis/node-start-stopper
-    get-first-node-subset
+    random-two-nodes-subset
     (fn start [test node]
       (info "Crash start" node)
       (stop_dropcaches! node)
@@ -199,7 +199,7 @@
 (def kill-random-processes
   "A nemesis that kills a random subset of processes."
   (nemesis/node-start-stopper
-    get-first-node-subset
+    random-two-nodes-subset
     (fn start [test node]
       (info "Kill start" node)
       (stop! node)
