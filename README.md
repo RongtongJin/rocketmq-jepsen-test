@@ -2,8 +2,6 @@
 
 A [jepsen](https://github.com/jepsen-io/jepsen) test for rocketmq on dledger
 
-## Usage
-
 ## What is being tested?
 
 [Apache RocketMQ](https://github.com/apache/rocketmq) is a distributed messaging and streaming platform with low latency, high performance and reliability, trillion-level capacity and flexible scalability. Since RocketMQ 4.5.0, RocketMQ supports the DLedger deployment, which is highly available, high durable and strong consistent. The test run concurrent operations from different nodes in a RocketMQ cluster and checks that the operations preserve the consistency properties defined in the test. During the test, various nemesis can be added to interfere with the operations.
