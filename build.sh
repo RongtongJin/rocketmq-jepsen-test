@@ -4,8 +4,8 @@ git submodule init
 git submodule update
 
 cd openmessaging-storage-dledger
-git checkout -b rocketmq_jepsen_test origin/rocketmq_jepsen_test
-git checkout rocketmq_jepsen_test
+git checkout -b fix_preferred_leader_bug origin/fix_preferred_leader_bug
+git checkout fix_preferred_leader_bug
 mvn clean install -DskipTests
 cd ..
 
