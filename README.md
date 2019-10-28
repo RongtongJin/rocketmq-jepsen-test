@@ -6,7 +6,7 @@ A [jepsen](https://github.com/jepsen-io/jepsen) test for rocketmq on dledger
 
 [Apache RocketMQ](https://github.com/apache/rocketmq) is a distributed messaging and streaming platform with low latency, high performance and reliability, trillion-level capacity and flexible scalability. Since RocketMQ 4.5.0, RocketMQ supports the DLedger deployment, which is highly available, high durable and strong consistent. The test run concurrent operations from different nodes in a RocketMQ cluster and checks that the operations preserve the consistency properties defined in the test. During the test, various nemesis can be added to interfere with the operations.
 
-Currently, verifiable model is  **total-queue**. Given a set of concurrent enqueue/dequeue to RocketMQ on dledger, verifies that every successful enqueue has a successful dequeue (what goes in must come out), queues only obey this property if the history includes draining them completely.
+Currently, checker is  **total-queue**. Given a set of concurrent enqueue/dequeue to RocketMQ on dledger, verifies that every successful enqueue has a successful dequeue (what goes in must come out), queues only obey this property if the history includes draining them completely.
 
 ## Usage  
 
@@ -67,9 +67,3 @@ See `lein run test --help` for  options.
 `--interval TIME`, nemesis interval, the default value is 15. 
 
 `--test-count TIMES`, times to run test, the default value is 1. 
-
-## Result
-
-**RocketMQ on dledger has passed all the tests above.**
-
-When you finish the test，you can excute `lein run serve`  and watch the report at http://ip_address:8080.
