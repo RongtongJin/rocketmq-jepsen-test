@@ -8,35 +8,6 @@
 (deftask :date "echo date on cluster" []
          (ssh "date"))
 
-(deftask :build []
-         (local (run "git submodule init;git submodule update"))
-         (local
-           (run
-             (cd "openmessaging-storage-dledger"
-                 (run "git checkout -b rocketmq_jepsen_test origin/rocketmq_jepsen_test")
-                 (run "git checkout rocketmq_jepsen_test")
-                 (run "git pull")
-                 (run "mvn clean install -DskipTests")
-                 )))
-         (local
-           (run
-             (cd "rocketmq"
-                 (run "git checkout -b jepsen_test origin/jepsen_test")
-                 (run "git checkout jepsen_test")
-                 (run "git pull")
-                 (run "mvn -Prelease-all -DskipTests clean install -U")
-                 )))
-
-         (local
-           (run
-             (cd "rocketmqclient"
-                 (run "mvn clean install -DskipTests")
-                 )))
-
-
-         (local (run "rm -rf rocketmq-jepsen.tar.gz;tar zcvf rocketmq-jepsen.tar.gz rocketmq/distribution/target/rocketmq-4.6.0-SNAPSHOT.tar.gz dledger-broker.conf brokershutdown.sh brokerstartup.sh stop_dropcaches.sh")))
-
-
 (deftask :deploy []
          (scp "rocketmq-jepsen.tar.gz" "/root/")
          (ssh

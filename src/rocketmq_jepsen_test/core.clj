@@ -28,7 +28,7 @@
 (defonce rocketmq-bin "java")
 (defonce rocketmq-log-path "/root/logs/rocketmqlogs")
 
-(def dledger-self-id (hash-map "172.16.2.121" "n0" "172.16.2.122" "n1" "172.16.2.123" "n2" "172.16.2.124" "n3" "172.16.2.127" "n4"))
+(def dledger-self-id (hash-map "n1" "n0" "n2" "n1" "n3" "n2" "n4" "n3" "n5" "n4"))
 
 (defn peer-id [node]
   (get dledger-self-id (str node)))
