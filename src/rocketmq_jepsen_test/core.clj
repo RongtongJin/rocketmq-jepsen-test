@@ -15,7 +15,7 @@
             [jepsen.checker.timeline :as timeline]
             [jepsen.control.util :as cu]
             [jepsen.os :as os])
-  (:import [com.jinrongtong5.rocketmqclient JepsenClient]))
+  (:import [org.apache.rocketmq.jepsen JepsenClient]))
 
 
 (defonce rocketmq-path "/root/rocketmq-jepsen/rocketmq-4.6.0-SNAPSHOT")

@@ -7,4 +7,4 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [jepsen "0.1.11" :exclusions [knossos]]
                  [knossos "0.3.5" :exclusions [org.slf4j/slf4j-log4j12]]
-                 [com.jinrongtong5/rocketmq-client "1.0-SNAPSHOT"]])
+                 [org.apache.rocketmq/rocketmq-client "1.0-SNAPSHOT"]])
