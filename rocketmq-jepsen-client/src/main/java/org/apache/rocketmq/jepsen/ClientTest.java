@@ -1,4 +1,4 @@
-package com.jinrongtong5.rocketmqclient;
+package org.apache.rocketmq.jepsen;
 
 public class ClientTest {
     public static JepsenClient jepsenClient = new JepsenClient();

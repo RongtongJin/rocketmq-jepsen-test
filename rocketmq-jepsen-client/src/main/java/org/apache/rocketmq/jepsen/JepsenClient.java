@@ -1,4 +1,4 @@
-package com.jinrongtong5.rocketmqclient;
+package org.apache.rocketmq.jepsen;
 
 import java.util.List;
 import java.util.UUID;
