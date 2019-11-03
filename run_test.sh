@@ -15,4 +15,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-lein run test --nodes-file  ./nodes --concurrency 4 $@
+lein run test --nodes-file  ./nodes --ssh-private-key ~/.ssh/id_rsa --concurrency 4 $@
