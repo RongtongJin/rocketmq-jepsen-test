@@ -14,7 +14,7 @@ Currently, checker is  **total-queue**. Given a set of concurrent enqueue/dequeu
 git submodule init
 git submodule update
 ``` 
-1. Prepare **one** control node and **five** db nodes and ensure that the control node can use SSH to  log into a bunch of db nodes. 
+1. Prepare **one** control node and **five** db nodes and ensure that the control node can use SSH to log into a bunch of db nodes, start a rocketmq nameserver node and modify the namesrvAddr configuration in *scripts/dledger-broker.conf*. 
 2. Install clojure, jepsen and [clojure-control](https://github.com/killme2008/clojure-control) on the control node.
 3. Edit *nodes* , *control.clj* and *src/rocketmq_jepsen_test/core.clj* files to set IP address, user name and path. Those values are hardcoded in the program by now.
 4. Deploy the rocketmq broker with clojure-control on the control node:

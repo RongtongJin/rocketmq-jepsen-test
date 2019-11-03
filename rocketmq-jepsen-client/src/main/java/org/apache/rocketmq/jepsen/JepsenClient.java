@@ -103,7 +103,7 @@ public class JepsenClient {
             log.warn("Exception info", e);
             return INFO_CODE;
         }
-        log.info("Send OK -- value {} = msgId:{}, messageQueue:{}, queueOffset:{}, offsetMsgId:{}.", value, sendResult.getMsgId(), sendResult.getMessageQueue(), sendResult.getQueueOffset(), sendResult.getOffsetMsgId());
+        // log.info("Send OK -- value {} = msgId:{}, messageQueue:{}, queueOffset:{}, offsetMsgId:{}.", value, sendResult.getMsgId(), sendResult.getMessageQueue(), sendResult.getQueueOffset(), sendResult.getOffsetMsgId());
         return OK_CODE;
     }
 
@@ -111,7 +111,7 @@ public class JepsenClient {
         List<MessageExt> messages = consumer.poll();
         if (!messages.isEmpty()) {
             consumer.commitSync();
-            log.info("Receive OK -- message = {}", messages.get(0));
+            // log.info("Receive OK -- message = {}", messages.get(0));
             return new String(messages.get(0).getBody());
         } else {
             return null;
