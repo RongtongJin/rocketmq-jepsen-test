@@ -1,0 +1,3 @@
+[submodule "rocketmq"]
+	path = rocketmq
+	url = git@github.com:apache/rocketmq.git

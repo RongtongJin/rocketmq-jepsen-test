@@ -8,8 +8,12 @@ A [jepsen](https://github.com/jepsen-io/jepsen) test for rocketmq on dledger
 
 Currently, checker is  **total-queue**. Given a set of concurrent enqueue/dequeue to RocketMQ on dledger, verifies that every successful enqueue has a successful dequeue (what goes in must come out), queues only obey this property if the history includes draining them completely.
 
-## Usage  
-
+## Usage 
+0. Initialize rocketmq submodule:
+```
+git submodule init
+git submodule update
+``` 
 1. Prepare **one** control node and **five** db nodes and ensure that the control node can use SSH to  log into a bunch of db nodes. 
 2. Install clojure, jepsen and [clojure-control](https://github.com/killme2008/clojure-control) on the control node.
 3. Edit *nodes* , *control.clj* and *src/rocketmq_jepsen_test/core.clj* files to set IP address, user name and path. Those values are hardcoded in the program by now.
